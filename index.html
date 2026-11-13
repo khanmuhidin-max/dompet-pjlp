@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Dompet PJLP - Sistem Terintegrasi</title>
+    <meta name="description" content="Dompet PJLP: Sistem Manajemen, Absensi, dan Keuangan Digital Terpadu Berbasis Google Spreadsheet & Drive">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/google-sans">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- File CSS Terpisah (File ke-4) -->
+    <link rel="stylesheet" href="./style.css">
+
+    <!-- Konfigurasi Tailwind CSS -->
+    <script>
+        window.tailwind = window.tailwind || {};
+        window.tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Google Sans"', "sans-serif"]
+                    }
+                }
+            }
+        };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Pustaka Utama (React 18, Babel, SweetAlert2, jsPDF) -->
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Optimasi Kestabilan & Lazy Loading Global -->
+    <script>
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            if (typeof args[0] === 'string' && args[0].includes('exceeds the max of 500KB')) return;
+            originalConsoleError.apply(console, args);
+        };
+
+        window.addEventListener('error', function(e) {
+            console.warn('Sistem pemulihan otomatis aktif:', e.message);
+            e.preventDefault();
+        });
+        window.addEventListener('unhandledrejection', function(e) {
+            console.warn('Promise teratasi otomatis:', e.reason);
+            e.preventDefault();
+        });
+    </script>
+</head>
+<body class="relative min-h-screen">
+    <!-- Area Render Aplikasi -->
+    <div id="root" class="relative z-10">
+        <div class="loading-screen">
+            <div class="loading-logo-box">
+                <svg style="width:2.5rem;height:2.5rem;color:#f97316" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v1.5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM21 10.5H5a2 2 0 0 0-2 2V18a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5.5a2 2 0 0 0-2-2zm-3 4.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                </svg>
+            </div>
+            <div class="loading-spinner"></div>
+            <h2 class="loading-title">Dompet PJLP</h2>
+            <p class="loading-subtitle">Menghubungkan ke Google Spreadsheet & Drive...</p>
+        </div>
+    </div>
+
+    <!-- Memuat & Mengeksekusi File Logika Utama (File ke-5: app.js) -->
+    <script>
+        window.addEventListener('load', function() {
+            fetch('./app.js')
+                .then(function(response) {
+                    if (!response.ok) throw new Error("Gagal memuat file app.js. Pastikan index.html, style.css, dan app.js berada di folder yang sama.");
+                    return response.text();
+                })
+                .then(function(sourceCode) {
+                    const compiledCode = Babel.transform(sourceCode, {
+                        presets: ['env', ['react', { runtime: 'classic' }]]
+                    }).code;
+                    const scriptEl = document.createElement('script');
+                    scriptEl.type = 'text/javascript';
+                    scriptEl.innerHTML = compiledCode;
+                    document.body.appendChild(scriptEl);
+                })
+                .catch(function(error) {
+                    console.error("Kompilasi Gagal:", error);
+                    document.getElementById('root').innerHTML = '<div style="padding:2rem;text-align:center;font-family:sans-serif;"><h3 style="color:#ef4444;">Gagal Memuat app.js</h3><p style="color:#64748b;font-size:0.875rem;">' + error.message + '</p></div>';
+                });
+        });
+    </script>
+</body>
+</html>
